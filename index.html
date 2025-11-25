@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="img comressr - Advanced image compression with hacker-inspired technology">
+    <title>img comressr - Compress Images Like a Hacker</title>
+    <style>
+        :root {
+            --neon-green: #00ff00;
+            --neon-blue: #00ccff;
+            --neon-purple: #cc00ff;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --terminal-text: #00ff00;
+            --glow: 0 0 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 0, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 204, 255, 0.05) 0%, transparent 20%);
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: rgba(10, 10, 10, 0.9);
+            border-bottom: 1px solid var(--neon-green);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            text-shadow: var(--glow) var(--neon-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: lowercase;
+            color: var(--neon-green);
+            text-shadow: var(--glow) var(--neon-green);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--neon-green);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-green);
+            transition: left 0.3s ease;
+        }
+
+        nav a:hover:before {
+            left: 0;
+        }
+
+        nav a:hover {
+            text-shadow: var(--glow) var(--neon-green);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--neon-green);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.05), transparent);
+            z-index: -1;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--neon-green);
+            text-shadow: var(--glow) var(--neon-green);
+            text-transform: lowercase;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            color: var(--neon-blue);
+        }
+
+        .typing-text {
+            border-right: 2px solid var(--neon-green);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+            max-width: 630px;
+            margin: 0 auto;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--neon-green) }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--glow) var(--neon-green);
+        }
+
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover:before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            text-shadow: var(--glow) var(--neon-green);
+            transform: translateY(-2px);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background-color: rgba(10, 10, 10, 0.7);
+            border: 1px solid var(--neon-green);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.05), transparent);
+            z-index: -1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--neon-green);
+            margin-bottom: 1rem;
+            text-shadow: var(--glow) var(--neon-green);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+        }
+
+        .feature-card p {
+            color: #aaa;
+        }
+
+        .terminal {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 3rem 0;
+            font-family: 'Courier New', monospace;
+            box-shadow: var(--glow) var(--neon-green);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27ca3f; }
+
+        .terminal-title {
+            margin-left: 10px;
+            color: var(--neon-blue);
+            font-size: 0.9rem;
+        }
+
+        .terminal-content {
+            color: var(--terminal-text);
+        }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+        }
+
+        .terminal-prompt {
+            color: var(--neon-purple);
+        }
+
+        .terminal-command {
+            color: var(--neon-blue);
+        }
+
+        .terminal-output {
+            color: var(--neon-green);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background-color: rgba(10, 10, 10, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: var(--glow) var(--neon-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background-color: rgba(5, 5, 5, 0.9);
+            border-top: 1px solid var(--neon-green);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--neon-green);
+            text-shadow: var(--glow) var(--neon-green);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 255, 0, 0.1);
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Matrix rain effect */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            nav {
+                width: 100%;
+                margin-top: 1rem;
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Glitch effect */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch:before,
+        .glitch:after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch:before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-purple);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch:after {
+            left: -2px;
+            text-shadow: -2px 0 var(--neon-blue);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(4px, 9999px, 91px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-rain" id="matrixRain"></div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🖼️</span>
+                    <h1 class="glitch" data-text="img comressr">img comressr</h1>
+                </div>
+                <button class="mobile-menu-btn">☰</button>
+                <nav>
+                    <ul>
+                        <li><a href="#">home</a></li>
+                        <li><a href="#">compress</a></li>
+                        <li><a href="#">features</a></li>
+                        <li><a href="#">api</a></li>
+                        <li><a href="#">contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>compress images like a hacker</h2>
+                <div class="typing-text">
+                    <p>optimize your images with advanced compression algorithms</p>
+                </div>
+                <p>reduce file sizes by up to 85% without sacrificing quality</p>
+                <a href="#" class="cta-button">start compressing now</a>
+            </div>
+        </section>
+
+        <div class="container">
+            <section class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                    <div class="terminal-title">terminal ~ img_comressr --status</div>
+                </div>
+                <div class="terminal-content">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">user@img-comressr:~$</span>
+                        <span class="terminal-command"> system_status --check</span>
+                    </div>
+                    <div class="terminal-line terminal-output">
+                        > Compression Engine: <span style="color: #27ca3f;">ONLINE</span>
+                    </div>
+                    <div class="terminal-line terminal-output">
+                        > Security Protocols: <span style="color: #27ca3f;">ACTIVE</span>
+                    </div>
+                    <div class="terminal-line terminal-output">
+                        > Processing Nodes: <span style="color: #27ca3f;">12/12 OPERATIONAL</span>
+                    </div>
+                    <div class="terminal-line terminal-output">
+                        > Images Compressed Today: <span style="color: #00ccff;">12,847</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">user@img-comressr:~$</span>
+                        <span class="terminal-command"> _</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>lightning fast</h3>
+                    <p>Our optimized algorithms compress images in milliseconds, even for large files.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>secure processing</h3>
+                    <p>All compression happens locally in your browser. Your images never leave your device.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>batch processing</h3>
+                    <p>Compress multiple images simultaneously with our advanced batch processing.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>advanced analytics</h3>
+                    <p>Get detailed reports on compression ratios and quality metrics.</p>
+                </div>
+            </section>
+
+            <section class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">average size reduction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50k+</div>
+                    <div class="stat-label">images compressed daily</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0.2s</div>
+                    <div class="stat-label">average processing time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">client-side security</div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>img comressr</h4>
+                    <p>Advanced image compression technology with a hacker-inspired interface.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>quick links</h4>
+                    <ul>
+                        <li><a href="#">home</a></li>
+                        <li><a href="#">compress tool</a></li>
+                        <li><a href="#">api documentation</a></li>
+                        <li><a href="#">pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>support</h4>
+                    <ul>
+                        <li><a href="#">help center</a></li>
+                        <li><a href="#">contact us</a></li>
+                        <li><a href="#">privacy policy</a></li>
+                        <li><a href="#">terms of service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>connect</h4>
+                    <ul>
+                        <li><a href="#">github</a></li>
+                        <li><a href="#">twitter</a></li>
+                        <li><a href="#">discord</a></li>
+                        <li><a href="#">blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 img comressr. all systems operational.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const nav = document.querySelector('nav');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                nav.classList.toggle('active');
+            });
+            
+            // Matrix rain effect
+            const matrixRain = document.getElementById('matrixRain');
+            const canvas = document.createElement('canvas');
+            matrixRain.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const charArray = chars.split("");
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            
+            for (let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+            
+            function drawMatrix() {
+                ctx.fillStyle = "rgba(5, 5, 5, 0.04)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = "#00ff00";
+                ctx.font = fontSize + "px monospace";
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(drawMatrix, 35);
+            
+            // Resize canvas when window resizes
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        });
+    </script>
+</body>
+</html>
